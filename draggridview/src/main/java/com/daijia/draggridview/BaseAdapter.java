@@ -4,6 +4,7 @@ import android.database.DataSetObservable;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * Created by flb on 16/5/24.
@@ -51,10 +52,10 @@ public abstract class BaseAdapter {
 
     public static class ViewHolder{
 
-        View mView;
-
+        View itemView;
         public ViewHolder(View view){
-            mView = view;
+            itemView = view;
+
         }
     }
 }

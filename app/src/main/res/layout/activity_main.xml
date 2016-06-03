@@ -13,5 +13,6 @@
     <com.daijia.draggridview.DragGridView
         android:id="@+id/drag_grid_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#ff99cc00"/>
 </RelativeLayout>
