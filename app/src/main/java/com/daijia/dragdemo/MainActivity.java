@@ -2,10 +2,12 @@ package com.daijia.dragdemo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daijia.draggridview.BaseAdapter;
 import com.daijia.draggridview.DragGridView;
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onExchange(int index0, int index1) {
-
+            Log.d("index0,index1",index0+" "+index1);
         }
     };
 
@@ -75,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
         TextView tv;
         public MyVH(View view) {
             super(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(MainActivity.this,tv.getText().toString(),Toast.LENGTH_SHORT).show();
+                }
+            });
             tv = (TextView) view.findViewById(com.daijia.draggridview.R.id.text);
         }
     }

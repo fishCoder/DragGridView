@@ -8,10 +8,12 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -37,6 +39,8 @@ public class DragGridView extends ViewGroup {
     LayoutManager mLayoutManager = new LayoutManager(mHandler);
 
     ViewRecycler mRecycler = new ViewRecycler();
+
+
 
     DataSetObserver mDataSetObserver = new DataSetObserver() {
         @Override
@@ -76,6 +80,8 @@ public class DragGridView extends ViewGroup {
         TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.DragGirdView);
         mLayoutManager.mColumn = ta.getInteger(R.styleable.DragGirdView_column_num, 3);
         ta.recycle();
+
+        mGestureDetectorCompat = new GestureDetectorCompat(context,mGestureListener);
     }
 
     @Override
@@ -204,17 +210,62 @@ public class DragGridView extends ViewGroup {
             setOnDragListener(mOnDragListener);
         }
 
-
-//        mRecycler.recyclerView(this);
     }
 
 
     float mInitX,mInitY;
     float mLastX,mLastY;
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
+    }
 
-    private Runnable mLongPressRunnable  = new Runnable() {
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                mInitX = mLastX = event.getX();
+                mInitY = mLastY = event.getY();
+
+                break;
+            case MotionEvent.ACTION_MOVE:
+//                mLayoutManager.onScroll((int)(nowX-mLastX),(int)(nowY-mLastY),mRecycler,this);
+
+                break;
+            case MotionEvent.ACTION_UP:
+                mLayoutManager.scrolled(this);
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+
+        requestLayout();
+        mGestureDetectorCompat.onTouchEvent(event);
+        return true;
+    }
+
+    GestureDetectorCompat mGestureDetectorCompat;
+    GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener(){
         @Override
-        public void run() {
+        public boolean onSingleTapUp(MotionEvent e) {
+            for (int i=0 ; i<getChildCount();i++){
+                View child = getChildAt(i);
+                LayoutParams layoutParams = (LayoutParams) child.getLayoutParams();
+                if(mInitX>layoutParams.left&&mInitX<layoutParams.right
+                        &&mInitY>layoutParams.top&&mInitY<layoutParams.bottom){
+                    child.performClick();
+                }
+            }
+            return super.onSingleTapUp(e);
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            super.onLongPress(e);
+
             for (int i=0 ; i<getChildCount();i++){
                 View child = getChildAt(i);
                 LayoutParams layoutParams = (LayoutParams) child.getLayoutParams();
@@ -225,54 +276,16 @@ public class DragGridView extends ViewGroup {
                 }
             }
         }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            mLayoutManager.onScroll(e2.getX()-mLastX,e2.getY()-mLastY,mRecycler,DragGridView.this);
+            mLastX = e2.getX();
+            mLastY = e2.getY();
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
     };
 
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
-    }
-
-    int mActivePointerId=0;
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                mInitX = mLastX = event.getX();
-                mInitY = mLastY = event.getY();
-                postDelayed(mLongPressRunnable, ViewConfiguration.getLongPressTimeout());
-
-                mActivePointerId = event.getPointerId(0);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float nowX = event.getX(mActivePointerId);
-                float nowY = event.getY(mActivePointerId);
-
-                mLayoutManager.onScroll((int)(nowX-mLastX),(int)(nowY-mLastY),mRecycler,this);
-
-                if(TOUCH_SLOP<Math.abs(nowX-mLastX)||TOUCH_SLOP<Math.abs(nowY-mLastY)){
-                    removeCallbacks(mLongPressRunnable);
-                }
-
-                mLastX = nowX;
-                mLastY = nowY;
-
-                break;
-            case MotionEvent.ACTION_UP:
-                mLayoutManager.scrolled(this);
-                removeCallbacks(mLongPressRunnable);
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                removeCallbacks(mLongPressRunnable);
-                break;
-        }
-
-        requestLayout();
-        return true;
-    }
 
     View.OnLongClickListener mOnLongClickListener = new View.OnLongClickListener() {
         @Override

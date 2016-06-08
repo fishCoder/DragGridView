@@ -32,8 +32,6 @@ public class ViewRecycler {
 
     public BaseAdapter.ViewHolder get(int index, ViewGroup parent){
 
-        Log.d("ViewMap",String.format("viewArrayMap[%d],scrapViewMap[%d]",viewArrayMap.size(),scrapViewMap.size()));
-
         BaseAdapter.ViewHolder viewHolder = viewArrayMap.get(index);
         if (viewHolder == null){
 
@@ -44,10 +42,11 @@ public class ViewRecycler {
                 viewArrayMap.put(index,viewHolder);
             }
             parent.addView(viewHolder.itemView);
+            mAdapter.onBindView(index,viewHolder);
         }else {
 //            viewArrayMap.removeAt(index);
         }
-        mAdapter.onBindView(index,viewHolder);
+
 
         return viewHolder;
     }
