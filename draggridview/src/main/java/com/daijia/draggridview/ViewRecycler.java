@@ -71,6 +71,10 @@ public class ViewRecycler {
         mAdapter.onExchange(index0,index1);
     }
 
+    public void onExchangeEnd(int index0,int index1){
+        mAdapter.onExchangeEnd(index0,index1);
+    }
+
     public void recyclerView(int index, BaseAdapter.ViewHolder scrapView,ViewGroup viewGroup){
         viewGroup.removeView(scrapView.itemView);
         viewArrayMap.remove(index);

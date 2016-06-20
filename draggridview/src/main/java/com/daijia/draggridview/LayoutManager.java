@@ -207,7 +207,7 @@ public class LayoutManager {
                     recycler.exchange(k,k+deta);
                 }
 
-
+                recycler.onExchangeEnd(i,mLastDragPassPosition);
                 BaseAdapter.ViewHolder viewHolderLast = recycler.get(mLastDragPassPosition,null);
                 rePositionMap.put(i,viewHolderLast);
                 exchangePosition(viewHolderLast.itemView,tempLayout);
