@@ -57,6 +57,11 @@ BaseAdapter baseAdapter = new BaseAdapter() {
         }
 
         @Override
+        public void onExchangeEnd(int index0, int index1) {
+            Log.d("index0,index1",index0+" "+index1);
+        }
+
+        @Override
         public void onExchange(int index0, int index1) {
 
         }
@@ -74,5 +79,5 @@ dragGridView.setAdapter(baseAdapter);
 ##Dependencies
 
 ```
-compile 'com.daijia.android:draggridview:1.0.2'
+compile 'com.daijia.android:draggridview:1.0.3'
 ```
