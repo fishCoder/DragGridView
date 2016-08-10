@@ -47,8 +47,7 @@ public abstract class BaseAdapter {
     public abstract long getItemId();
     public abstract void onBindView(int position,ViewHolder viewHolder);
     public abstract ViewHolder onCreateView(ViewGroup parent);
-    public abstract void onExchange(int index0,int index1);
-    public abstract void onExchangeEnd(int index0,int index1);
+    public abstract void onExchange(int index0,int index1,boolean isEnd);
 
     public static class ViewHolder{
 

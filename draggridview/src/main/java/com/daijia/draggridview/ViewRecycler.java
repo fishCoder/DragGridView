@@ -68,11 +68,11 @@ public class ViewRecycler {
     }
 
     public void exchange(int index0,int index1){
-        mAdapter.onExchange(index0,index1);
+        mAdapter.onExchange(index0,index1,false);
     }
 
     public void onExchangeEnd(int index0,int index1){
-        mAdapter.onExchangeEnd(index0,index1);
+        mAdapter.onExchange(index0,index1,true);
     }
 
     public void recyclerView(int index, BaseAdapter.ViewHolder scrapView,ViewGroup viewGroup){

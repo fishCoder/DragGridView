@@ -66,14 +66,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onExchangeEnd(int index0, int index1) {
-            Log.d("index0,index1",index0+" "+index1);
-        }
-
-        @Override
-        public void onExchange(int index0, int index1) {
+        public void onExchange(int index0, int index1, boolean isEnd) {
 
         }
+
+
     };
 
 
